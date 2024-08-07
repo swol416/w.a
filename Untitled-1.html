@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winter Apocalypse Game</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style> 
+
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #1c1c1c;
+    color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+#status-bar {
+    display: flex;
+    justify-content: center;
+    width: 700px;
+    height: 200px;
+    border: 2px solid #333;
+    padding: 20px;
+    background-color: #333;
+    margin-bottom: 10px;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    width: 100%;
+}
+
+#character-info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+#character-photo {
+    width: 170px;
+    height: 170px;
+    margin-right: 50px;
+    border: 2px solid #f5f5f5;
+}
+
+#character-details {
+    display: flex;
+    flex-direction: column;
+}
+
+#character-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+ 
+#health-status, #energy-status, #traits, #items {
+    font-size: 14px;
+    margin-top: 2px;
+}
+
+#game-box {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 700px;
+    max-height: 400px;
+    border: 2px solid #333;
+    padding: 20px;
+    background-color: #333;
+    margin-bottom: 10px;
+}
+
+#choices button {
+    background-color: #444;
+    color: #f5f5f5;
+    border: none;
+    padding: 10px 20px;
+    margin: 30px 20px;
+    cursor: pointer;
+    text-align: left;
+}
+
+#choices button:hover {
+    background-color: #555;
+}
+
+#status-bar2 {
+    display: none;
+    justify-content: center;
+    width: 700px;
+    height: 200px;
+    border: 2px solid #333;
+    padding: 20px;
+    background-color: #333;
+    margin-bottom: 10px;
+}
+
+.status-item2 {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    width: 100%;
+}
+
+#character-info2 {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+#character-photo2 {
+    width: 100px;
+    height: 100px;
+    margin-right: 50px;
+    border: 2px solid #f5f5f5;
+}
+
+#character-details2 {
+    display: flex;
+    flex-direction: column;
+}
+
+#character-name2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#health-status2, #energy-status2 #traits2 {
+    font-size: 14px;
+    margin-top: 2px;
+}
+
+</style>
+
+</head>
+
+<body>
+    <div id="status-bar">
+        <div class="status-item" id="character-info">
+            <img src="image0.jpeg" alt="Character" id="character-photo">
+            <div id="character-details">
+                <div id="character-name">선각자</div>
+                <div id="day" style="display: none;">Day 1</div>
+                <div id="health-status">체력: <span id="health-value">100</span></div>
+                <div id="energy-status">에너지: 100</div>
+                <div id="traits">특성: <span id="traits-value">연기</span></div>
+                <div>아이템: <span id="items">없음</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-box">
+        <h3>7월 30일</h3>
+        <div id="story-text">무너져내린 건물 잔해는 새하얀 눈이 뒤덮였다. 무슨 연유로 저 건물이 무너져 내렸는지는 의문이다. 
+            겨울 이전 재건축을 기다렸던 건물이었던 건가, 아니면 이후 폭도들의 습격이라도 있었던 것인가. 흔적들은 전부 눈에 뒤덮였다. 
+            알 수 없는 것에 흥미를 가지지 마라. 살아남기 위한 수칙이다.<br><br>눈이 뒤덮인 오늘, 오늘은 7월 30일이다.
+        </div>
+        <div id="choices">
+            <button onclick="makeChoice(1)">밖으로 나간다</button> 
+            <button onclick="makeChoice(2)">동료를 찾는다</button>
+        </div>
+    </div>
+
+    <div id="status-bar2" style="display: none;">
+        <div class="status-item2" id="character-info2">
+            <img src="image2.jpeg" alt="Character" id="character-photo">
+            <div id="character-details2">
+                <div id="character-name2">캐릭터 이름</div>
+                <div id="health-status2">체력: 100</div>
+                <div id="energy-status2">에너지: 100</div>
+            </div>
+        </div>
+    </div> 
+
+    <script>
+        const gameDays = {
+            1:{
+                story: "무너져내린 건물 잔해는 새하얀 눈이 뒤덮였다. 무슨 연유로 저 건물이 무너져 내렸는지는 의문이다. 겨울 이전 재건축을 기다렸던 건물이었던 건가, 아니면 이후 폭도들의 습격이라도 있었던 것인가. 흔적들은 전부 눈에 뒤덮였다. 알 수 없는 것에 흥미를 가지지 마라. 살아남기 위한 수칙이다.<br><br>눈이 뒤덮인 오늘, 오늘은 7월 30일이다.",
+                choices: [
+                    {text: "밖으로 나간다", action: () => makeChoice(1)},
+                    {text: "동료를 찾는다", action: () => makeChoice(2)}
+                ]
+            },
+            2:{
+                story: "둘째날",
+                choices: [
+                    {text: "밖으로 나간다", action: () => makeChoice() },
+                    {text: "동료를 찾는다", action: () => makeChoice()}
+                ]
+            }
+            
+        };
+        
+        
+        let health = 100;
+        let traits = ["연기"];
+        let items = [];
+        let firstMet = true;
+        let day = 1;
+
+        function initializeStatus(){
+            document.getElementById('health-value').innerText = health;
+            document.getElementById('traits-value').innerText = traits.length > 0 ? traits.join(', ') : '없음';
+            document.getElementById('day').innerText = 'Day ${day}';
+            updateItemsDisplay();
+            updateStoryAndChoices();
+        }
+
+        function updateHealth(amount){
+            health += amount;
+            if (health < 0) health = 0;
+            document.getElementById('health-value').innerText = health;
+        }
+
+        function addTraits(trait){
+            if(!traits.includes(trait)){
+                traits.push(trait);
+                document.getElementById('traits-value').innerText = traits.join(', ');
+            }
+        }
+
+        function hasTrait(trait){
+            return traits.includes(trait);
+        }
+
+        function addItem(item){
+            items.push(item);
+            updateItemsDisplay();
+        }
+
+        function removeItem(item){
+            const index = items.indexOf(item);
+            if(index > -1){
+                items.splice(index, 1);
+                updateItemsDisplay();
+            }
+        }
+
+        function hasItem(item){
+            return items.includes(item);
+        }
+
+        function updateItemsDisplay() {
+            const itemsElement = document.getElementById('items');
+            if(itemsElement){
+                itemsElement.innerText = items.length > 0 ? items.join(', ') : '없음';
+            }
+        }
+
+        function nextDay(){
+            day++;
+            document.getElementById('day').innerText = 'Day ${day}';
+            updateStoryAndChoices();
+        }
+
+        function updateStoryAndChoices(){
+            let storyText = document.getElementById('story-text');
+            let choices = document.getElementById('choices');
+
+            if(gameDays[day]){
+                storyText.innerText = gameDays[day].story;
+                choices.innerHTML = '';
+                gameDays[day].choices.forEach(choice => {
+                    addChoice(choice.text, choice.action);
+                });
+            } else{
+                storyText.innerText = "더 이상 스토리가 없습니다.";
+                choices.innerHTML = '';
+            }
+        }
+
+        function makeChoice(choice){
+            let storyText = document.getElementById('story-text');
+            let choices = document.getElementById('choices');
+            choices.innerHTML = '';
+        
+        
+            switch(choice) {
+                case 1:
+                    storyText.innerText = "주변은 하얀 눈뿐이다. 오른쪽에는 건물이 멀리 보인다. 이 상황에서 멀쩡한 건물이 보인다면 그곳에는 사람이 살고 있을 테다. 그러므로  그 사람들이 호의적인 사람인지, 비호의적인 사람인지 경계해야 한다. 반대로 왼쪽은 허허벌판이다. 얼마나 더 가야 할지 모른다. 어느 쪽으로 갈까?";
+                    addChoice("건물이 보이는 오른쪽", function(){
+                        storyText.innerText = "건물로 다가간다. 멀리서 보이는 건물이 점점 크게 보인다. 조금 더 걸으니 건물의 앞에 도착했다. 예상했던 대로 주변에는 사람의 흔적이 한가득이다. 하지만 사람이 보이지는 않는다. 건물의 입구는 굳게 잠겨있다. 한참 어슬렁거리니 1층 문 옆 창문에서 소리가 들린다. 중후한 중년 남자의 목소리다. “무슨 용건으로 오셨소?”";
+                        choices.innerHTML = '';
+                        addChoice("친절히 다가간다", function(){
+                            addTraits("호의적")
+                            storyText.innerText = "“지나가는 여행자예요. 혹시 도움이 필요하신가요? 필요하신 거라두요.“ 최대한 친절한 목소리로 말한다. 창문 너머 ‘소리‘는 말이 없다. 대신 창문 안 쪽에서 웅성거리는 소리가 난다. 한참을 웅성댄다. 발걸음을 돌리려는 찰나, 중후한 중년 남자가 아닌, 젊은 남자의 목소리가 창문 너머로 들려온다. “아픈 아이가 하나 있습니다. 의료품을 주신다면 저희도 필요하신 것과 교환해드리겠습니다.“";
+                            choices.innerHTML = '';
+                            addChoice("승락한다", nextDay);
+                            addChoice("거절한다", function(){
+
+                            });
+                        });
+                        addChoice("거짓말을 한다", function(){
+                            addTraits("거짓말")
+                            choices.innerHTML = '';
+                            storyText.innerText = "가족을 찾고 있어요. 몇달 전에 떨어진 가족인데, 혹시 여기 있을까 해서요.”"<br>"아무 소리도 들리지 않는다. 거짓말이 통하지 않았나 싶었을 무렵, 굳게 잠겼던 문이 열린다."<br>"“우리 중 가족을 잃은 사람은 없는 듯 하네만, 혹시 모르니 들어오시게.”"<br>"아까 창문 너머로 들려온 목소리와 동일한 목소리이다. 얼굴에 주름이 자글자글한 중년이다. 중년 뒤로는 여러 사람이 보입니다. 청년부터 시작해서 어린이까지. 아마 일종의 마을을 이곳에서 꾸린 모양입니다.";
+                        })
+                    });
+                    addChoice("허허벌판인 왼쪽")
+                    break;
+                
+                case 2:
+                    storyText.innerText = "당신은 숲으로 향합니다. 바람이 세게 불고, 눈이 내립니다. 나무 밑에 작은 피난처를 발견합니다.";
+                    if(firstMet){
+                        document.getElementById('status-bar2').style.display = 'flex';
+                        firstMet = false;
+                    }
+                    break;
+    
+                default:
+                    storyText.innerText = "선택이 유효하지 않습니다. 다시 시도해 주세요.";
+                    break;
+            }
+        }
+
+       function addChoice(text, callback){
+            let button = document.createElement('button');
+            button.innerText = text;
+            button.onclick = callback;
+            document.getElementById('choices').appendChild(button);
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeStatus);
+
+    </script>
+</body>
+</html>
